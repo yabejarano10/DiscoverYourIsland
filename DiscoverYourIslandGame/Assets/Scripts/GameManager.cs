@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -13,17 +15,22 @@ public class GameManager : MonoBehaviour
     private float levelCount = 1;
     private float LifeCount = 2;
     [SerializeField] Text objective;
+    [SerializeField] Text Lifes;
 
     private GameObject clone1;
     private GameObject clone2;
     private GameObject clone3;
     private GameObject clone4;
 
+    bool gameOver = false;
+
     // Start is called before the first frame update
     void Start ()
     {
         levelCount = 1;
         clone1 = Instantiate (round1Prefab);
+        Lifes.text = $"{LifeCount}";
+        DontDestroyOnLoad (this.gameObject);
     }
 
     // Update is called once per frame
@@ -31,59 +38,85 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown (0))
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-            if (Physics.Raycast (ray, out hit, 100.0f))
+            if (EventSystem.current.IsPointerOverGameObject ())
             {
-                if(hit.transform.gameObject.tag == "Selectable" || hit.transform.gameObject.tag == "Win")
+                Debug.Log ("Clicked on the UI");
+            }
+            else
+            {
+                Debug.Log ("Not ui");
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+                if (Physics.Raycast (ray, out hit, 100.0f))
                 {
-                   hit.transform.GetChild(0).gameObject.SetActive(true);
+                    if (hit.transform.gameObject.tag == "Selectable" || hit.transform.gameObject.tag == "Win")
+                    {
+                        hit.transform.GetChild (0).gameObject.SetActive (true);
+                    }
                 }
             }
+
         }
 
-        CheckLife();
+        if (!gameOver)
+        {
+            CheckLife ();
+        }
     }
 
-    public void CheckSelection(GameObject go)
+    public bool CheckSelection (GameObject go)
     {
-        if(go.tag == "Win")
+        if (go.tag == "Win")
         {
             levelCount++;
-            ChangeRound(levelCount);
+            ChangeRound (levelCount);
+            return true;
         }
         else
         {
             LifeCount--;
+            Lifes.text = $"{LifeCount}";
+            return false;
         }
     }
 
-    void ChangeRound(float level)
+    void ChangeRound (float level)
     {
         switch (level)
         {
             case 2:
-                Debug.Log(clone1.name);
-                Destroy(clone1);
+                Destroy (clone1);
                 clone2 = Instantiate (round2Prefab);
                 objective.text = "Objetivo: Pan de fruta";
                 break;
             case 3:
-                Destroy(clone2);
-                clone3 = Instantiate(round3Prefab);
+                Destroy (clone2);
+                clone3 = Instantiate (round3Prefab);
+                objective.text = "Objetivo: El Acuario";
                 break;
             case 4:
-                Destroy(clone3);
-                clone4 = Instantiate(round4Prefab);
+                Destroy (clone3);
+                clone4 = Instantiate (round4Prefab);
+                objective.text = "Objetivo: La Piscinita";
+                break;
+            case 5:
+                Debug.Log ("WIN");
                 break;
         }
     }
 
-    void CheckLife()
+    void CheckLife ()
     {
-        if(LifeCount <= 0)
+        if (LifeCount <= 0)
         {
-            Debug.Log("GAME OVER");
+            SceneManager.LoadScene ("GameOverScene");
+            gameOver = true;
         }
+    }
+
+    public void ResetGame ()
+    {
+        SceneManager.LoadScene ("MainGame");
+        Destroy(this.gameObject);
     }
 }

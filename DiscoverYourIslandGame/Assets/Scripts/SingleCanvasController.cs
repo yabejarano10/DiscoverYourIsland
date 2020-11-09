@@ -25,6 +25,10 @@ public class SingleCanvasController : MonoBehaviour
     public void SelectItem()
     {
         var obj =  transform.parent.gameObject;
-        gm.CheckSelection(obj);
+        bool win = gm.CheckSelection(obj);
+        if(!win)
+        {
+            Disable();
+        }
     }
 }

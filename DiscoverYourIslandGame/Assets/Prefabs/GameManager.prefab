@@ -47,3 +47,5 @@ MonoBehaviour:
   round2Prefab: {fileID: 3648625525997128604, guid: be24cdba1b4e3704a9b89c7416dcd333, type: 3}
   round3Prefab: {fileID: 4837364636877196474, guid: d5fe771ef14cf294bb3bdf8396d5eebb, type: 3}
   round4Prefab: {fileID: 1206558669696614183, guid: d5457a400621bb34e825b1d131ee5978, type: 3}
+  objective: {fileID: 0}
+  Lifes: {fileID: 0}

@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
                 objective.text = "Objetivo: La Piscinita";
                 break;
             case 5:
-                Debug.Log ("WIN");
+                SceneManager.LoadScene ("WIN");
                 break;
         }
     }

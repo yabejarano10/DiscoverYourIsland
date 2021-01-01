@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (hit.transform.gameObject.tag == "Selectable" || hit.transform.gameObject.tag == "Win")
                     {
+                        hit.transform.gameObject.GetComponent<AudioSource>().Play();
                         hit.transform.GetChild (0).gameObject.SetActive (true);
                     }
                 }
@@ -82,6 +83,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeRound (float level)
     {
+        gameObject.GetComponent<AudioSource>().Play();
         switch (level)
         {
             case 2:

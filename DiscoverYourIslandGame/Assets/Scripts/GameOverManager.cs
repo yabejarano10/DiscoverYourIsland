@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameOverManager : MonoBehaviour
 {
@@ -20,5 +21,11 @@ public class GameOverManager : MonoBehaviour
     public void ResetGame()
     {
         gm.ResetGame();
+    }
+
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene ("MainMenu");
+        Destroy(GameObject.Find("GameManager"));
     }
 }
